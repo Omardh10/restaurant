@@ -3,12 +3,12 @@ const { ForgotPassword, ResetPassword } = require('../controller/PasswordControl
 const router = express.Router();
 
 
-/*** this is code forgot the password */
-
+/*** this is route forgot the password */
 router.post('/forgot-password', ForgotPassword)
 
-/*** this is code reset the password */
 
+
+/*** this is route reset the password */
 router.post('/reset-password/:userId/:token',ResetPassword )
 
 

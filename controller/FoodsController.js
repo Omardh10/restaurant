@@ -5,6 +5,40 @@ const path = require('path');
 const { UploadImage, RemoveImage } = require('../utils/cloudinary');
 const { Category } = require('../models/Category');
 
+
+/*** get all foods */
+const GetFoods = asynchandler(async (req, res) => {
+
+    const query = req.query;
+    const page = query.page || 1
+    const limit = query.limit || 2
+    const skip = (page - 1) * limit
+    const category = query.category
+    let foods;
+    if (page) {
+        foods = await Food.find().limit(limit).skip(skip).populate("restaurant", ["_id", "title", "foods"])
+        res.status(200).json({ status: "success", foods })
+    }
+    if (category) {
+        foods = await Food.find({ category }).populate("restaurant", ["_id", "title", "foods"]);
+        res.status(200).json({ status: "success", foods })
+    } else {
+        foods = await Food.find().populate("restaurant", ["_id", "title", "foods"]);
+        res.status(200).json({ status: "success", foods })
+    }
+})
+
+/*** get single food */
+const GetSingleFood = asynchandler(async (req, res) => {
+
+    const food = await Food.findById(req.params.id).populate("restaurant");
+    if (!food) {
+        return res.status(404).json({ message: "food not found ..." })
+    }
+    res.status(200).json({ status: "success", food })
+})
+
+/*** post new food */
 const NewFood = asynchandler(async (req, res) => {
 
     if (!req.file) {
@@ -35,6 +69,7 @@ const NewFood = asynchandler(async (req, res) => {
     fs.unlinkSync(pathimg);
 })
 
+/*** update food */
 const UpdateFood = asynchandler(async (req, res) => {
 
     const { error } = validateupdatefood(req.body);
@@ -57,7 +92,8 @@ const UpdateFood = asynchandler(async (req, res) => {
     res.status(202).json({ status: "success", food })
 })
 
-const UpdateImageFood=asynchandler(async(req,res)=>{
+/*** update image of food */
+const UpdateImageFood = asynchandler(async (req, res) => {
 
     let food = await Food.findById(req.params.id);
     if (!food) {
@@ -78,6 +114,7 @@ const UpdateImageFood=asynchandler(async(req,res)=>{
     fs.unlinkSync(pathimg);
 })
 
+/*** delete food */
 const DeleteFood = asynchandler(async (req, res) => {
 
     const food = await Food.findById(req.params.id);
@@ -90,38 +127,10 @@ const DeleteFood = asynchandler(async (req, res) => {
     }
 })
 
-const GetFoods = asynchandler(async (req, res) => {
-
-    const query = req.query;
-    const page = query.page || 1
-    const limit = query.limit || 2
-    const skip = (page - 1) * limit
-    const category = query.category
-    let foods;
-    if (page) {
-        foods = await Food.find().limit(limit).skip(skip).populate("restaurant", ["_id", "title", "foods"])
-        res.status(200).json({ status: "success", foods })
-    }
-    if (category) {
-        foods = await Food.find({ category }).populate("restaurant", ["_id", "title", "foods"]);
-        res.status(200).json({ status: "success", foods })
-    } else {
-        foods = await Food.find().populate("restaurant", ["_id", "title", "foods"]);
-        res.status(200).json({ status: "success", foods })
-    }
-})
-
-const GetSingleFood = asynchandler(async (req, res) => {
-
-    const food = await Food.findById(req.params.id).populate("restaurant");
-    if (!food) {
-        return res.status(404).json({ message: "food not found ..." })
-    }
-    res.status(200).json({ status: "success", food })
-})
 
 
-module.exports={
+
+module.exports = {
     GetFoods,
     GetSingleFood,
     UpdateFood,

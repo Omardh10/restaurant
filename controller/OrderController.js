@@ -2,6 +2,8 @@ const asynchandler = require('express-async-handler');
 const { validatecreateorder, Order } = require('../models/Order');
 const { Food } = require('../models/Food');
 
+
+/*** post new order */
 const NewOrder = asynchandler(async (req, res) => {
 
     const { error } = validatecreateorder(req.body);
@@ -32,12 +34,14 @@ const NewOrder = asynchandler(async (req, res) => {
     res.status(201).json({ status: "success", neworder });
 })
 
+/*** get all orders */
 const GetOrders = asynchandler(async (req, res) => {
 
     const orders = await Order.find().populate("user", ["_id", "username", "birthdate"]);
     res.status(200).json({ status: "success", orders });
 })
 
+/*** get single order */
 const GetSingleOrder = asynchandler(async (req, res) => {
 
     const order = await Order.findById(req.params.id).populate("user", ["_id", "username", "birthdate"]);
@@ -48,6 +52,7 @@ const GetSingleOrder = asynchandler(async (req, res) => {
     }
 })
 
+/*** update order */
 const UpdateOrder = asynchandler(async (req, res) => {
 
     let order = await Order.findById(req.params.id)
@@ -82,6 +87,7 @@ const UpdateOrder = asynchandler(async (req, res) => {
     }
 })
 
+/*** delete order */
 const DeleteOrder = asynchandler(async (req, res) => {
 
     let order = await Order.findById(req.params.id)

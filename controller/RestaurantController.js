@@ -1,6 +1,8 @@
 const asynchandler = require('express-async-handler');
 const { validatecreateres, Restaurant } = require('../models/Restaurant');
 
+
+/*** post new restaurant */
 const NewRestaurant = asynchandler(async (req, res) => {
 
     const { error } = validatecreateres(req.body);
@@ -19,6 +21,7 @@ const NewRestaurant = asynchandler(async (req, res) => {
     res.status(201).json({ status: "success", newrestaurant });
 })
 
+/*** update restaurant */
 const UpdateRestaurant = asynchandler(async (req, res) => {
 
     let restaurant = await Restaurant.findById(req.params.id);
@@ -30,7 +33,8 @@ const UpdateRestaurant = asynchandler(async (req, res) => {
     }
 })
 
-const deleteRestaurant = asynchandler(async (req, res) => {
+/*** delete restaurant */
+const DeleteRestaurant = asynchandler(async (req, res) => {
 
     let restaurant = await Restaurant.findById(req.params.id);
     if (!restaurant) {
@@ -41,6 +45,7 @@ const deleteRestaurant = asynchandler(async (req, res) => {
     }
 })
 
+/*** get all restaurants */
 const GetRestaurants = asynchandler(async (req, res) => {
 
     const restaurants = await Restaurant.find();
@@ -48,6 +53,7 @@ const GetRestaurants = asynchandler(async (req, res) => {
 
 })
 
+/*** get single restaurant */
 const GetSingleRestaurants = asynchandler(async (req, res) => {
 
     const restaurant = await Restaurant.findById(req.params.id);
@@ -57,6 +63,7 @@ const GetSingleRestaurants = asynchandler(async (req, res) => {
         res.status(200).json({ status: "success", restaurant });
     }
 })
+
 
 
 

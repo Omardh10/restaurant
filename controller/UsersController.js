@@ -3,8 +3,9 @@ const { validateregister, User, validatelogin, validateupdateregister } = requir
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
-const RegisterUser = asynchandler(async (req, res) => {
 
+/*** register new user */
+const RegisterUser = asynchandler(async (req, res) => {
 
     const { error } = validateregister(req.body)
     if (error) {
@@ -31,6 +32,7 @@ const RegisterUser = asynchandler(async (req, res) => {
     res.status(201).json({ status: "success", newuser })
 })
 
+/*** login old user */
 const LoginUser = asynchandler(async (req, res) => {
 
     const { email, password } = req.body;
@@ -54,6 +56,7 @@ const LoginUser = asynchandler(async (req, res) => {
     }
 })
 
+/*** update user */
 const UpdateUser = asynchandler(async (req, res) => {
 
     const user = await User.findById(req.params.id);
@@ -87,12 +90,14 @@ const UpdateUser = asynchandler(async (req, res) => {
     res.status(201).json({ status: "success", updateuser })
 })
 
+/*** get all users */
 const GetUsers = asynchandler(async (req, res) => {
 
     const users = await User.find();
     res.status(200).json({ status: "success", users })
 })
 
+/*** get single user */
 const GetSingleUser = asynchandler(async (req, res) => {
 
     const user = await User.findById(req.params.id);
@@ -103,6 +108,7 @@ const GetSingleUser = asynchandler(async (req, res) => {
     res.status(200).json({ status: "success", user })
 })
 
+/*** delete user */
 const DeleteUser = asynchandler(async (req, res) => {
 
     const user = await User.findById(req.params.id);
@@ -113,6 +119,8 @@ const DeleteUser = asynchandler(async (req, res) => {
     res.status(200).json({ message: "deleted seccussfully" })
 
 })
+
+
 
 
 module.exports = {
