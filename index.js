@@ -5,25 +5,19 @@ const userroute = require('./routes/users');
 const resroute = require('./routes/restaurants');
 const foodrout = require('./routes/foods');
 const categroute = require('./routes/categories');
-const orderoute=require('./routes/orders');
+const orderoute = require('./routes/orders');
 const { ConnectToDb } = require('./utils/db');
 dotenv.config();
 app.use(express.json());
-
-// mongoose.connect("mongodb://localhost/resturantdb").then(() => {
-//     console.log("connect to db");
-
-// })>>||<<
+const port = 4000;
 
 ConnectToDb();
 
 app.use('/api/users', userroute);
 app.use('/api/restaurants', resroute);
 app.use('/api/foods', foodrout);
-app.use('/api/categories',categroute);
-app.use('/api/orders',orderoute);
-
-
+app.use('/api/categories', categroute);
+app.use('/api/orders', orderoute);
 
 
 
@@ -37,7 +31,7 @@ app.use((error, req, res, next) => {
     res.status(404).json({ message: error.message })
 })
 
-app.listen(4000, () => {
-    console.log("server on port 4000");
+app.listen(process.env.PORT || port, () => {
+    console.log(`server on port ${process.env.PORT || port}`);
 
 })
